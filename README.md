@@ -1,6 +1,6 @@
 # vue-webb-app
 
-##URL https://tempgram-72e06.web.app
+
 
 ## Project setup
 ```
