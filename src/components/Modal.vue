@@ -74,6 +74,7 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 10px;
+    width: 100%;
   }
   .v-image {
     height: 380px !important;

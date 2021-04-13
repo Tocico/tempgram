@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import AllImages from './AllImages'
+import AllImages from '../components/AllImages'
     export default {
         name: "Home",
         components: {

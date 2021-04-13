@@ -8,11 +8,15 @@
         v-for="(image, index) in images"
         :key="index"
         class="d-flex child-flex"
-        cols="3"
+        cols="12"
+        xs="8"
+        sm="6"
+        md="4"
+        lg="3"
       >
         <v-img
           :src="image.url"
-          :lazy-src="`${image.url * 5 + 10}`"
+          :lazy-src="`${image.url * 5 + 5}`"
           aspect-ratio="1"
           class="img"
           @click="onClick(image)"
