@@ -11,22 +11,13 @@
 
 
 <script>
-import imageCompression from "../plugins/ImageCompression";
 
 export default {
   name: "Upload",
-  data() {
-    return {
-      compressedImg: "",
-    };
-  },
   methods: {
-    async onChange(e) {
+    onChange(e) {
       const selectedImg = e.target.files[0];
-      this.compressedImg = await imageCompression.getCompressImageFile(
-        selectedImg
-      );
-      this.$emit("upload-img", this.compressedImg);
+      this.$emit("upload-img", selectedImg);
     },
   },
 };

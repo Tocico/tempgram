@@ -16,6 +16,7 @@ import {
 } from "../firebase/config";
 import { uuid } from "vue-uuid";
 import { mapGetters } from "vuex";
+import imageCompression from "../plugins/ImageCompression";
 
 
 export default {
@@ -35,6 +36,7 @@ export default {
   data: () => {
     return {
       file: null,
+      compressedImg: "",
       types: [
         "image/jpeg",
         "image/png",
@@ -50,10 +52,15 @@ export default {
     };
   },
   methods: {
-    updateImg(selectedImg) {
+   async updateImg(selectedImg) {
       this.errorMsg = "";
       if (selectedImg && this.types.includes(selectedImg.type)) {
+         //Compress image before to sore it in db
+         this.compressedImg = await imageCompression.getCompressImageFile(
+        selectedImg
+      );
         this.file = selectedImg;
+
         this.storage();
       } else {
         this.file = null;
