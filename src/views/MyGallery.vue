@@ -1,6 +1,7 @@
 <template>
   <div class="container">
-    <UploadForm :user="user.data" @upload-img="uploadImg" />
+    <span>Please add your favorite images</span>
+    <UploadForm :user="user" @upload-img="uploadImg" />
     <Images :images="images && images" @toggle-deleteImg="toggleDeleteImg"  />
   </div>
 </template>
@@ -8,13 +9,12 @@
 <script>
 import UploadForm from "../components/UploadForm";
 import Images from "../components/Images";
-import { mapGetters } from "vuex";
 import { getUserImages } from "../server/api";
-import { projectStorage, projectFirestore } from "../firebase/config";
+import { projectStorage, projectFirestore, projectFirebase } from "../firebase/config";
 
 
 export default {
-  name: "UserImages",
+  name: "MyGallery",
   data() {
     return {
       images: [],
@@ -25,26 +25,29 @@ export default {
     Images,
   },
   computed: {
-    ...mapGetters({
-      user: "user",
-    }),
+    user() {
+         return this.$store.getters.user.data;
+    },
+    img() {
+      return this.$store.getters.images.data;
+    }
   },
   methods: {
     async getImages() {
-      this.images = await getUserImages(this.user.data.id);
+      this.images = await getUserImages(this.user.id);
     },
     async uploadImg() {
       await this.getImages();
     },
     toggleDeleteImg(image) {
-      console.log(image);
-      console.log(this.user.data.id)
+       //Delete liked image data in realtime db
+      projectFirebase.ref('images').child(image.key).remove()
       //Delete image in storage
       projectStorage.ref(image.storageId).delete();
       // //Delete recipe in firestore
      projectFirestore
         .collection("users")
-        .doc(this.user.data.id)
+        .doc(this.user.id)
         .collection("images")
         .doc(image.id)
         .delete()

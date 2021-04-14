@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home";
 import Register from "../views/Register";
 import Login from "../views/Login";
-import UserImages from "../views/UserImages";
+import MyGallery from "../views/MyGallery";
 import { projectAuth } from '../firebase/config'
 
 Vue.use(VueRouter);
@@ -15,9 +15,9 @@ const routes = [
     component: Home
   },
   {
-    path: "/userImages",
-    name: "userImages",
-    component: UserImages,
+    path: "/mygallery",
+    name: "mygallery",
+    component: MyGallery,
     meta: { requiresAuth: true }
   },
   {
@@ -29,6 +29,10 @@ const routes = [
     path: "/register",
     name: "register",
     component: Register
+  },
+  {
+    path: '*',
+    redirect: '/'
   }
 ];
 

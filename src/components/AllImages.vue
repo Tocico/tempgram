@@ -24,7 +24,6 @@ export default {
       }
   },
   async created() {
-      console.log("image INNN")
       this.images = await this.getAllImages()
   }
 };

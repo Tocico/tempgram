@@ -1,4 +1,4 @@
-import { projectFirestore } from "../firebase/config";
+import { projectFirestore, projectFirebase } from "../firebase/config";
 
 export async function getUserImages(userId) {
   let userImages = [];
@@ -43,6 +43,18 @@ export async function getAllUserImages() {
       console.log(error);
     });
 
-    console.log(allUserImages)
   return allUserImages;
 }
+
+//Get liked number
+export const getLikedCount = async (key) => {
+  let images;
+  await projectFirebase
+    .ref("images")
+    .child(key)
+    .once("value", (snap) => {
+      images = snap.val()   
+    });
+
+  return images;
+};

@@ -1,9 +1,6 @@
 <template>
   <div>
-    <span class="errorMsg" v-if="error"
-      >削除できませんでした。再度お試しください</span
-    >
-    <v-row>
+ <v-row>
       <v-col
         v-for="(image, index) in images"
         :key="index"
@@ -43,8 +40,8 @@
 </template>
 
 <script>
+import { getLikedCount } from '../server/api';
 import Modal from "./Modal";
-// import { projectStorage, projectFirestore } from "../firebase/config";
 
 export default {
   name: "Images",
@@ -63,8 +60,10 @@ export default {
     };
   },
   methods: {
-    onClick(image) {
+    async onClick(image) {
       this.image = image;
+      const imageFromDB = await getLikedCount(image.key)
+      this.$store.dispatch("fetchImages", imageFromDB)
       this.isModalShow = !this.isModalShow;
     },
     toggleModal() {
@@ -75,28 +74,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.img-grid {
-  margin: 20px auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 40px;
-}
-.img-wrap {
-  overflow: hidden;
-  height: 0;
-  padding: 50% 0;
-  /* padding controls height, will always be perfectly square regardless of width */
-  position: relative;
-  opacity: 0.8;
-}
-.img-wrap img {
-  min-width: 100%;
-  min-height: 100%;
-  max-width: 150%;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
 .v-progress-circular {
   position: absolute;
   display: inline-flex;

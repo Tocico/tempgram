@@ -7,10 +7,16 @@ export default new Vuex.Store({
       loggedIn: false,
       data: null,
     },
+    images: {
+      data: null
+    }
   },
   getters: {
     user(state) {
       return state.user;
+    },
+    images(state) {
+      return state.images;
     },
   },
   mutations: {
@@ -19,6 +25,9 @@ export default new Vuex.Store({
     },
     SET_USER(state, data) {
       state.user.data = data;
+    },
+    SET_IMAGES(state, data) {
+      state.images.data = data;
     },
   },
   actions: {
@@ -34,13 +43,11 @@ export default new Vuex.Store({
         commit("SET_USER", null);
       }
     },
-    setUser({ commit }, user) {
-      console.log("set user: " + user)
-      commit("SET_USER", {
-        displayName: user.displayName,
-        email: user.email,
-        id: user.uid,
-      });
-    },
+    fetchImages({ commit }, images) {
+       commit("SET_IMAGES", {
+          liked: images.liked,
+          storageId: images.storageId         
+       })
+    }
   },
 });

@@ -13,11 +13,10 @@ import {
   projectStorage,
   projectFirestore,
   timestamp,
+  projectFirebase,
 } from "../firebase/config";
 import { uuid } from "vue-uuid";
-import { mapGetters } from "vuex";
 import imageCompression from "../plugins/ImageCompression";
-
 
 export default {
   name: "Uploadform",
@@ -28,15 +27,9 @@ export default {
   props: {
     user: Object,
   },
-   computed: {
-    ...mapGetters({
-      dipatchUser: "user",
-    }),
-  },
   data: () => {
     return {
       file: null,
-      compressedImg: "",
       types: [
         "image/jpeg",
         "image/png",
@@ -52,14 +45,14 @@ export default {
     };
   },
   methods: {
-   async updateImg(selectedImg) {
+    async updateImg(selectedImg) {
       this.errorMsg = "";
       if (selectedImg && this.types.includes(selectedImg.type)) {
-         //Compress image before to sore it in db
-         this.compressedImg = await imageCompression.getCompressImageFile(
-        selectedImg
-      );
-        this.file = selectedImg;
+        //Compress image before to sore it in db
+        const compressedImg = await imageCompression.getCompressImageFile(
+          selectedImg
+        );
+        this.file = compressedImg;
 
         this.storage();
       } else {
@@ -94,10 +87,21 @@ export default {
           const url = await storageRef.getDownloadURL();
           const createdAt = timestamp();
           const userId = this.user.id;
-          const userName = this.dipatchUser.data.displayName
-          
-          await collectionRef.add({ url, createdAt, userId, storageId, userName });
-          console.log(url);
+          const userName = this.$store.state.user.data.displayName;
+          const imagesRef = projectFirebase.ref().child("images");
+          const { key } = imagesRef.push({
+            storageId: storageId,
+          });
+
+          await collectionRef.add({
+            url,
+            createdAt,
+            userId,
+            storageId,
+            userName,
+            key
+          });
+
           this.url = url;
           this.percentage = 0;
           this.file = null;

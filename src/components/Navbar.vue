@@ -16,7 +16,7 @@
           <v-icon>mdi-magnify</v-icon>
         </v-btn> -->
 
-        <router-link to="/userImages" v-show="user.loggedIn">
+        <router-link to="/mygallery" v-show="user.loggedIn">
           <div v-if="user.loggedIn && user.data.displayName" class="nav-item">
             <Avator :name="user.data.displayName.charAt(0)"  />
           </div>
@@ -57,7 +57,7 @@
 
 <script>
 import { projectAuth } from "../firebase/config";
-import { mapGetters } from "vuex";
+// import { mapGetters } from "vuex";
 import Button from "../components/Button";
 import Avator from "../components/Avator";
 
@@ -68,11 +68,9 @@ export default {
     Avator,
   },
   computed: {
-    // map `this.user` to `this.$store.getters.user`
-
-    ...mapGetters({
-      user: "user",
-    }),
+    user() {
+         return this.$store.getters.user;
+    }
   },
   methods: {
     logOut() {

@@ -33,7 +33,6 @@
 
 <script>
 import { projectAuth } from "../firebase/config";
-import { mapGetters } from "vuex";
 
 export default {
   data() {
@@ -57,9 +56,6 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({
-      user: "user",
-    }),
     validateForm() {
       return !this.email || !this.password || !this.name;
     },
@@ -72,7 +68,6 @@ export default {
             data.user.updateProfile({
                 displayName: this.name,
           });
-          this.$store.dispatch('fetchUser', data.user)
         }).then(() => {
             projectAuth.signOut();
             this.$router.push({ name: "login" });
