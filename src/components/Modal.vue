@@ -8,14 +8,12 @@
       ></v-img>
 
       <v-card-title>
-        <v-avatar class="avator">
-          <v-icon dark> mdi-account </v-icon>
-        </v-avatar>
-        {{ image.userName }}
+        <Avator :icon="icon" color="#557d55" />
+     
+         <span class="userName">{{ image.userName }} </span>
         <v-icon @click="handleLike" class="likeBtn">{{
           isLiked ? "mdi-heart" : "mdi-heart-outline"
         }}</v-icon>
-        <!-- <span class="likeCount">{{ isLikedUser && isLikedUser }}</span> -->
         <span class="likeCount">{{ likedCount && likedCount }}</span>
       </v-card-title>
 
@@ -34,16 +32,21 @@
 <script>
 import { projectFirebase } from "../firebase/config";
 import { getLikedCount } from "../server/api";
+import Avator from "./Avator"
 
 export default {
   name: "Modal",
   props: {
     image: Object,
   },
+  components: {
+    Avator
+  },
   data() {
     return {
       isDeletebtnShow: Boolean,
       isLiked: false,
+      icon: "mdi-account"
     };
   },
   computed: {
@@ -127,10 +130,6 @@ export default {
 </script>
 
 <style lang="scss">
-.avator {
-  background-color: #557d55;
-  margin-right: 10px;
-}
 .backdrop {
   position: fixed;
   top: 0;
@@ -161,6 +160,9 @@ export default {
   }
   .likeCount {
     font-size: 0.7em;
+  }
+  .userName {
+    margin-left: 10px;
   }
 }
 </style>

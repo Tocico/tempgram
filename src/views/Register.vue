@@ -1,7 +1,17 @@
 <template>
-  <div class="form container">
+  <div class="form container register">
     <h2>Register</h2>
-    <v-form @submit.prevent="onSubmit">
+    <v-alert
+      class="successMsg"
+      v-show="isRegSuccess"
+      type="success"
+      dismissible
+      border="top"
+    >
+      Registration completed successfully<br />
+      Now you can log in
+    </v-alert>
+    <v-form @submit.prevent="onSubmit" ref="form">
       <v-text-field
         v-model="name"
         append-icon="mdi-account"
@@ -37,6 +47,7 @@ import { projectAuth } from "../firebase/config";
 export default {
   data() {
     return {
+      isRegSuccess: false,
       name: "",
       email: "",
       password: "",
@@ -50,7 +61,10 @@ export default {
           return pattern.test(value) || "メールアドレスを確認してください";
         },
         password: (value) => {
-          return value.length >= 6 || "パスワードは6文字以上にしてください";
+          if(value) {
+            return value.length >= 6 || "パスワードは6文字以上にしてください";
+          }
+          return true
         },
       },
     };
@@ -62,15 +76,18 @@ export default {
   },
   methods: {
     onSubmit() {
+      //Registration
       projectAuth
         .createUserWithEmailAndPassword(this.email, this.password)
         .then((data) => {
-            data.user.updateProfile({
-                displayName: this.name,
+          data.user.updateProfile({
+            displayName: this.name,
           });
-        }).then(() => {
-            projectAuth.signOut();
-            this.$router.push({ name: "login" });
+        })
+        .then(() => {
+          projectAuth.signOut();
+          this.$refs.form.reset()
+          this.isRegSuccess = !this.isRegSuccess
         })
         .catch((error) => {
           if (error.code === "auth/invalid-email") {
@@ -89,9 +106,22 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .theme--light.v-btn.v-btn--has-bg {
   background-color: #d69f3f !important;
   color: white;
+}
+.register {
+  position: relative;
+  .successMsg {
+    background-color: #465d86 !important;
+    max-width: 500px;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+  }
 }
 </style>

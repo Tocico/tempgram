@@ -8,7 +8,7 @@
           </v-btn>
         </router-link>
 
-        <v-toolbar-title>Tempgram</v-toolbar-title>
+        <v-toolbar-title class="title">Tempgram</v-toolbar-title>
 
         <v-spacer></v-spacer>
 
@@ -17,18 +17,14 @@
         </v-btn> -->
 
         <router-link to="/mygallery" v-show="user.loggedIn">
-          <div v-if="user.loggedIn && user.data.displayName" class="nav-item">
-            <Avator :name="user.data.displayName.charAt(0)"  />
+          <div v-if="userName" class="nav-item">
+            <Avator :name="userName.charAt(0)" color="#e6bf64" />
           </div>
         </router-link>
 
         <span v-if="!user.loggedIn">
-            <Button
-              text="Register"
-              @btn-click="register"
-              color="#4f6b9a"
-            />
-      </span>
+          <Button text="Register" @btn-click="register" color="#4f6b9a" />
+        </span>
 
         <div class="ml-10">
           <span v-if="user.loggedIn">
@@ -50,14 +46,13 @@
         </div>
       </v-app-bar>
     </div>
-   
-    <router-view />
+
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import { projectAuth } from "../firebase/config";
-// import { mapGetters } from "vuex";
 import Button from "../components/Button";
 import Avator from "../components/Avator";
 
@@ -69,8 +64,14 @@ export default {
   },
   computed: {
     user() {
-         return this.$store.getters.user;
-    }
+      return this.$store.getters.user;
+    },
+    userName() {
+      return (
+        this.$store.getters.user.loggedIn &&
+        this.$store.getters.user.data.displayName
+      );
+    },
   },
   methods: {
     logOut() {
@@ -81,15 +82,23 @@ export default {
       this.$route.name !== "login" ? this.$router.push({ name: "login" }) : "";
     },
     register() {
-      this.$route.name !== "register" ? this.$router.push({ name: "register" }) : "";
+      this.$route.name !== "register"
+        ? this.$router.push({ name: "register" })
+        : "";
     },
   },
 };
 </script>
 
 <style lang="scss" >
+@import "../assets/app.scss";
 .v-toolbar__content {
-    background: #506550;
+  background: #506550;
 }
-  
+.title {
+  display: none;
+  @include media-s {
+    display: block;
+  }
+}
 </style>

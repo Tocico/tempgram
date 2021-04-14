@@ -6,6 +6,7 @@ import axios from "axios";
 import { projectAuth } from './firebase/config'
 import vuetify from '@/plugins/vuetify' 
 import UUID from 'vue-uuid'  
+import "./assets/app.scss"
   
 Vue.use(UUID);  
 

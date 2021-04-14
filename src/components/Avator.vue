@@ -1,29 +1,31 @@
 <template>
   <div>
-    <v-avatar class="avator" size="38">
-      <span class="white--text headline">{{ name }}</span>
+    <v-avatar :style="{ background: color }" class="avator" size="38">
+      <span v-if="name" class="white--text headline">{{ name }}</span>
+      <v-icon v-if="icon" class="icon"> {{ icon }} </v-icon>
     </v-avatar>
   </div>
 </template>
 
 <script>
 export default {
-    name: "Avator",
-    props: {
-        name: String,
-
-    }
+  name: "Avator",
+  props: {
+    name: String,
+    icon: String,
+    color: String
+  },
+  created() {
+    console.log(this.icon);
+  },
 };
 </script>
 
 <style scoped lang="scss">
-.avator {
-    background: #e6bf64;
-    color: white;
+.avator, .icon::before {
+  color: white;
 }
 .headline {
-    font-size: 1.5em;
+  font-size: 1.5em;
 }
-
-
 </style>

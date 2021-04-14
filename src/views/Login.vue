@@ -42,7 +42,7 @@ export default {
   methods: {
     onSubmit(e) {
       e.preventDefault();
-      console.log("Innn");
+      //Log in
       projectAuth
         .signInWithEmailAndPassword(this.email, this.password)
         .then(() => {
